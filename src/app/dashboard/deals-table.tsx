@@ -49,15 +49,24 @@ export default function DealsTable({ deals, stages }: Props) {
   const [statusFilter, setStatusFilter] = useState("all");
   const [stageFilter, setStageFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"risk" | "amount_desc" | "amount_asc" | "last_touch_asc" | "last_touch_desc">("risk");
 
   const uniqueStages = Array.from(new Set(deals.map((d) => stages[d.stage] ?? d.stage).filter(Boolean))).sort();
 
-  const filtered = deals.filter((d) => {
-    if (statusFilter !== "all" && d.state !== statusFilter) return false;
-    if (stageFilter !== "all" && (stages[d.stage] ?? d.stage) !== stageFilter) return false;
-    if (search && !d.name.toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
+  const filtered = deals
+    .filter((d) => {
+      if (statusFilter !== "all" && d.state !== statusFilter) return false;
+      if (stageFilter !== "all" && (stages[d.stage] ?? d.stage) !== stageFilter) return false;
+      if (search && !d.name.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === "amount_desc") return (b.amount ?? -1) - (a.amount ?? -1);
+      if (sortBy === "amount_asc") return (a.amount ?? Infinity) - (b.amount ?? Infinity);
+      if (sortBy === "last_touch_asc") return a.days_silent - b.days_silent;
+      if (sortBy === "last_touch_desc") return b.days_silent - a.days_silent;
+      return 0; // keep original risk order
+    });
 
   return (
     <div style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, overflow: "hidden" }}>
@@ -80,6 +89,13 @@ export default function DealsTable({ deals, stages }: Props) {
         <select value={stageFilter} onChange={(e) => setStageFilter(e.target.value)} style={sel}>
           <option value="all">All stages</option>
           {uniqueStages.map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} style={sel}>
+          <option value="risk">Sort: Risk</option>
+          <option value="amount_desc">Amount ↓</option>
+          <option value="amount_asc">Amount ↑</option>
+          <option value="last_touch_asc">Last touch (recent)</option>
+          <option value="last_touch_desc">Last touch (oldest)</option>
         </select>
         <span style={{ fontSize: 12, color: "#A1A1AA" }}>{filtered.length} deals</span>
       </div>
