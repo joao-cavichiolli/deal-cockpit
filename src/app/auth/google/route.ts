@@ -17,5 +17,5 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/auth/login?error=oauth", origin));
   }
 
-  return NextResponse.redirect(data.url);
+  return NextResponse.redirect(data.url, { status: 303 });
 }
