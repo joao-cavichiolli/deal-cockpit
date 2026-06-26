@@ -10,7 +10,7 @@ export default async function ConnectionsPage() {
   const { data: conns } = await supabase.from("connections").select("provider").eq("user_id", user.id);
   const connected = new Set((conns ?? []).map((c: { provider: string }) => c.provider));
   const googleConnected = connected.has("google");
-  const hubspotConnected = connected.has("hubspot");
+  const hubspotConnected = !!process.env.HUBSPOT_ACCESS_TOKEN;
 
   return (
     <AppLayout userEmail={user.email} userName={user.user_metadata?.full_name}>
