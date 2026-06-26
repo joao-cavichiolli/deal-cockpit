@@ -1,4 +1,5 @@
 "use client";
+// Dark mode: all colours use CSS variables from globals.css
 
 import { useState } from "react";
 
@@ -41,8 +42,8 @@ interface Props {
 }
 
 const sel: React.CSSProperties = {
-  background: "#fff", border: "1px solid #EBEBEB", borderRadius: 7,
-  padding: "5px 10px", fontSize: 12.5, color: "#27272A", cursor: "pointer", outline: "none",
+  background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 7,
+  padding: "5px 10px", fontSize: 12.5, color: "var(--text-body)", cursor: "pointer", outline: "none",
 };
 
 export default function DealsTable({ deals, stages }: Props) {
@@ -69,10 +70,10 @@ export default function DealsTable({ deals, stages }: Props) {
     });
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, overflow: "hidden" }}>
+    <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden" }}>
       {/* Toolbar */}
-      <div style={{ padding: "14px 20px", borderBottom: "1px solid #F1F1F2", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-        <span style={{ fontSize: 14, fontWeight: 600, color: "#18181B", flex: 1 }}>Deals · sorted by risk</span>
+      <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border-sub)", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-head)", flex: 1 }}>Deals · sorted by risk</span>
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -103,28 +104,28 @@ export default function DealsTable({ deals, stages }: Props) {
       {/* Table */}
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid #F1F1F2" }}>
+          <tr style={{ borderBottom: "1px solid var(--border-sub)" }}>
             {["Deal", "Stage", "Amount", "Close", "Last touch", "Status", "Flags"].map((h) => (
-              <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 600, color: "#A1A1AA", letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
+              <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 600, color: "var(--text-faint)", letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 && (
-            <tr><td colSpan={7} style={{ padding: "32px 16px", textAlign: "center", fontSize: 13, color: "#A1A1AA" }}>No deals match the filters.</td></tr>
+            <tr><td colSpan={7} style={{ padding: "32px 16px", textAlign: "center", fontSize: 13, color: "var(--text-faint)" }}>No deals match the filters.</td></tr>
           )}
           {filtered.map((deal, i) => {
             const cfg = STATE_CONFIG[deal.state as keyof typeof STATE_CONFIG];
             const stageName = stages[deal.stage] ?? deal.stage;
             return (
-              <tr key={deal.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid #F4F4F5" : "none" }}>
-                <td style={{ padding: "13px 16px", fontSize: 13.5, fontWeight: 500, color: "#18181B", maxWidth: 220 }}>
+              <tr key={deal.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid var(--border-row)" : "none" }}>
+                <td style={{ padding: "13px 16px", fontSize: 13.5, fontWeight: 500, color: "var(--text-head)", maxWidth: 220 }}>
                   <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{deal.name}</div>
                 </td>
-                <td style={{ padding: "13px 16px", fontSize: 13, color: "#52525B" }}>{stageName || "—"}</td>
-                <td style={{ padding: "13px 16px", fontSize: 13, fontWeight: 600, color: "#27272A", fontVariantNumeric: "tabular-nums" }}>{fmt(deal.amount)}</td>
-                <td style={{ padding: "13px 16px", fontSize: 13, color: "#52525B" }}>{fmtDate(deal.close_date)}</td>
-                <td style={{ padding: "13px 16px", fontSize: 13, color: deal.days_silent >= 7 ? "#E0532B" : "#52525B" }}>
+                <td style={{ padding: "13px 16px", fontSize: 13, color: "var(--text-sec)" }}>{stageName || "—"}</td>
+                <td style={{ padding: "13px 16px", fontSize: 13, fontWeight: 600, color: "var(--text-body)", fontVariantNumeric: "tabular-nums" }}>{fmt(deal.amount)}</td>
+                <td style={{ padding: "13px 16px", fontSize: 13, color: "var(--text-sec)" }}>{fmtDate(deal.close_date)}</td>
+                <td style={{ padding: "13px 16px", fontSize: 13, color: deal.days_silent >= 7 ? "#E0532B" : "var(--text-sec)" }}>
                   {deal.days_silent >= 999 ? "Never" : `${deal.days_silent}d ago`}
                 </td>
                 <td style={{ padding: "13px 16px" }}>
@@ -136,9 +137,9 @@ export default function DealsTable({ deals, stages }: Props) {
                 <td style={{ padding: "13px 16px" }}>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                     {deal.flags.map((f) => (
-                      <span key={f} style={{ fontSize: 11, background: "#F4F4F5", color: "#71717A", borderRadius: 4, padding: "2px 7px", border: "1px solid #EBEBEB" }}>{FLAG_LABELS[f] ?? f}</span>
+                      <span key={f} style={{ fontSize: 11, background: "var(--tag-bg)", color: "var(--text-muted)", borderRadius: 4, padding: "2px 7px", border: "1px solid var(--border)" }}>{FLAG_LABELS[f] ?? f}</span>
                     ))}
-                    {deal.flags.length === 0 && <span style={{ fontSize: 11, color: "#A1A1AA" }}>—</span>}
+                    {deal.flags.length === 0 && <span style={{ fontSize: 11, color: "var(--text-faint)" }}>—</span>}
                   </div>
                 </td>
               </tr>

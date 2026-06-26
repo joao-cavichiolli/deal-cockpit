@@ -51,10 +51,10 @@ export default async function DashboardPage() {
     <AppLayout userEmail={user.email} userName={user.user_metadata?.full_name}>
       <div style={{ padding: "32px 36px" }}>
         {/* Morning header */}
-        <div style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+        <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
           <div>
             <Greeting name={user.user_metadata?.full_name?.split(" ")[0] ?? user.email?.split("@")[0] ?? "there"} />
-            <div style={{ fontSize: 13.5, color: "#71717A", marginTop: 3 }}>
+            <div style={{ fontSize: 13.5, color: "var(--text-muted)", marginTop: 3 }}>
               {deals
                 ? `Your pipeline has ${deals.length} open deals — ${atRisk} need a move.`
                 : "Connect HubSpot to see your pipeline."}
@@ -65,20 +65,20 @@ export default async function DashboardPage() {
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#18A05B" }} />
               Auto-send on
             </span>
-            <span style={{ fontSize: 13, color: "#A1A1AA" }}>Next run Mon 10:00</span>
+            <span style={{ fontSize: 13, color: "var(--text-faint)" }}>Next run Mon 10:00</span>
           </div>
         </div>
 
         <div style={{ marginBottom: 20 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, color: "#18181B", margin: 0 }}>Pipeline overview</h2>
+          <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-head)", margin: 0 }}>Pipeline overview</h2>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 28 }}>
           {STATS.map((s) => (
-            <div key={s.label} style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, padding: "18px 20px" }}>
-              <div style={{ fontSize: 26, fontWeight: 700, color: s.accent ? "#E0532B" : "#18181B", letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums" }}>{s.value}</div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: "#27272A", marginTop: 4 }}>{s.label}</div>
-              <div style={{ fontSize: 12, color: "#A1A1AA", marginTop: 2 }}>{s.sub}</div>
+            <div key={s.label} style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 12, padding: "18px 20px" }}>
+              <div style={{ fontSize: 26, fontWeight: 700, color: s.accent ? "#E0532B" : "var(--text-head)", letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums" }}>{s.value}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-body)", marginTop: 4 }}>{s.label}</div>
+              <div style={{ fontSize: 12, color: "var(--text-faint)", marginTop: 2 }}>{s.sub}</div>
             </div>
           ))}
         </div>
