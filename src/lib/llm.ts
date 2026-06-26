@@ -63,11 +63,13 @@ Respond with JSON only: { "subject": "...", "body": "..." }`;
   const content = json.choices?.[0]?.message?.content ?? "{}";
 
   try {
-    return JSON.parse(content);
+    // Strip markdown code fences if present
+    const clean = content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+    return JSON.parse(clean);
   } catch {
     return {
       subject: `Re: ${dealName} — quick follow-up`,
-      body: content,
+      body: content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim(),
     };
   }
 }
