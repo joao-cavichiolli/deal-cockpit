@@ -49,11 +49,32 @@ export default async function DashboardPage() {
   return (
     <AppLayout userEmail={user.email} userName={user.user_metadata?.full_name}>
       <div style={{ padding: "32px 36px" }}>
-        <div style={{ marginBottom: 28 }}>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#18181B", letterSpacing: "-0.02em", margin: 0 }}>Pipeline overview</h1>
-          <p style={{ fontSize: 13.5, color: "#71717A", marginTop: 4, marginBottom: 0 }}>
-            {deals ? `${deals.length} deals synced from HubSpot` : "Connect HubSpot to see your pipeline"}
-          </p>
+        {/* Morning header */}
+        <div style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+          <div>
+            <div style={{ fontSize: 12, color: "#A1A1AA", marginBottom: 4 }}>
+              {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })} · Lisbon
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: "#18181B", letterSpacing: "-0.02em" }}>
+              Good morning, {user.user_metadata?.full_name?.split(" ")[0] ?? user.email?.split("@")[0]}
+            </div>
+            <div style={{ fontSize: 13.5, color: "#71717A", marginTop: 3 }}>
+              {deals
+                ? `Your pipeline has ${deals.length} open deals — ${atRisk} need a move.`
+                : "Connect HubSpot to see your pipeline."}
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 20, flexShrink: 0 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 500, color: "#15824B" }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#18A05B" }} />
+              Auto-send on
+            </span>
+            <span style={{ fontSize: 13, color: "#A1A1AA" }}>Next run Mon 10:00</span>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <h2 style={{ fontSize: 16, fontWeight: 600, color: "#18181B", margin: 0 }}>Pipeline overview</h2>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 28 }}>
