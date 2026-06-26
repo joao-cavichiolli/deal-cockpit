@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import ThemeToggle from "./theme-toggle";
 
 const NAV = [
   {
@@ -74,18 +75,19 @@ export default function AppLayout({ children, userEmail, userName }: AppLayoutPr
     .join("");
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100%", overflow: "hidden", background: "#FAFAFA" }}>
+    <div style={{ display: "flex", height: "100vh", width: "100%", overflow: "hidden", background: "var(--bg-page)" }}>
       {/* Sidebar */}
-      <aside style={{ width: 248, flexShrink: 0, background: "#FFFFFF", borderRight: "1px solid #ECECEC", display: "flex", flexDirection: "column", padding: "18px 14px" }}>
+      <aside style={{ width: 248, flexShrink: 0, background: "var(--bg-sidebar)", borderRight: "1px solid var(--border)", display: "flex", flexDirection: "column", padding: "18px 14px" }}>
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 8px 20px 8px" }}>
           <div style={{ width: 30, height: 30, borderRadius: 8, background: "#4F46E5", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 2px rgba(79,70,229,.4)" }}>
             <div style={{ width: 12, height: 12, border: "2.5px solid #fff", borderRadius: 3 }} />
           </div>
-          <div style={{ lineHeight: 1.1 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em" }}>Deal Cockpit</div>
-            <div style={{ fontSize: 11, color: "#A1A1AA", fontWeight: 500 }}>LayerX</div>
+          <div style={{ lineHeight: 1.1, flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--text-head)" }}>Deal Cockpit</div>
+            <div style={{ fontSize: 11, color: "var(--text-faint)", fontWeight: 500 }}>LayerX</div>
           </div>
+          <ThemeToggle />
         </div>
 
         {/* Nav */}
@@ -101,8 +103,8 @@ export default function AppLayout({ children, userEmail, userName }: AppLayoutPr
                   padding: "8px 11px", borderRadius: 8,
                   fontSize: 13.5, fontWeight: 500, cursor: "pointer",
                   textDecoration: "none", transition: "background .12s, color .12s",
-                  background: active ? "#EEF0FF" : "transparent",
-                  color: active ? "#4F46E5" : "#52525B",
+                  background: active ? "var(--nav-active)" : "transparent",
+                  color: active ? "var(--primary)" : "var(--text-sec)",
                 }}
               >
                 {item.icon}
@@ -122,15 +124,15 @@ export default function AppLayout({ children, userEmail, userName }: AppLayoutPr
         </nav>
 
         {/* User */}
-        <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #F1F1F2" }}>
+        <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid var(--border-sub)" }}>
           <form action="/auth/signout" method="POST">
             <button type="submit" style={{ width: "100%", background: "transparent", border: "none", cursor: "pointer", padding: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, padding: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#E0E7FF", color: "#4338CA", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, flexShrink: 0 }}>
+                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--nav-active)", color: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, flexShrink: 0 }}>
                   {initials}
                 </div>
                 <div style={{ lineHeight: 1.2, minWidth: 0, textAlign: "left" }}>
-                  <div style={{ fontSize: 13, fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: "#18181B" }}>
+                  <div style={{ fontSize: 13, fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-head)" }}>
                     {userName ?? userEmail?.split("@")[0]}
                   </div>
                   <div style={{ fontSize: 11, color: "#A1A1AA", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
