@@ -7,8 +7,28 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error && data.session) {
+      const { session } = data;
+      const providerToken = session.provider_token;
+      const providerRefreshToken = session.provider_refresh_token;
+
+      // Save Google token to connections table
+      if (providerToken) {
+        await supabase.from("connections").upsert(
+          {
+            user_id: session.user.id,
+            provider: "google",
+            access_token: providerToken,
+            refresh_token: providerRefreshToken ?? null,
+            scopes: "gmail.send gmail.readonly",
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "user_id,provider" }
+        );
+      }
+
       return NextResponse.redirect(new URL("/dashboard", origin));
     }
   }
