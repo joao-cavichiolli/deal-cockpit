@@ -22,13 +22,28 @@ export interface HubContact {
 }
 
 export async function getDeals(): Promise<HubDeal[]> {
-  const res = await fetch(
-    `${BASE}/crm/v3/objects/deals?limit=100&properties=dealname,dealstage,amount,closedate,hs_lastmodifieddate`,
-    { headers: headers(), next: { revalidate: 300 } }
-  );
+  // Use search API to exclude closed deals
+  const body = {
+    filterGroups: [
+      {
+        filters: [
+          { propertyName: "hs_is_closed", operator: "EQ", value: "false" },
+        ],
+      },
+    ],
+    properties: ["dealname", "dealstage", "amount", "closedate", "hs_lastmodifieddate"],
+    limit: 100,
+  };
+
+  const res = await fetch(`${BASE}/crm/v3/objects/deals/search`, {
+    method: "POST",
+    headers: headers(),
+    body: JSON.stringify(body),
+    next: { revalidate: 300 },
+  });
   if (!res.ok) throw new Error(`HubSpot deals error: ${res.status}`);
   const json = await res.json();
-  return json.results.map((d: any) => ({
+  return (json.results ?? []).map((d: any) => ({
     id: d.id,
     name: d.properties.dealname ?? "Unnamed deal",
     stage: d.properties.dealstage ?? "",
@@ -67,11 +82,15 @@ export async function getDealContacts(dealId: string): Promise<HubContact[]> {
   return contacts.filter(Boolean) as HubContact[];
 }
 
+export async function getDealContactsWithInfo(dealId: string): Promise<HubContact[]> {
+  return getDealContacts(dealId);
+}
+
 export async function getPipelineStages(): Promise<Record<string, string>> {
-  const res = await fetch(
-    `${BASE}/crm/v3/pipelines/deals`,
-    { headers: headers(), next: { revalidate: 3600 } }
-  );
+  const res = await fetch(`${BASE}/crm/v3/pipelines/deals`, {
+    headers: headers(),
+    next: { revalidate: 3600 },
+  });
   if (!res.ok) return {};
   const json = await res.json();
   const map: Record<string, string> = {};
