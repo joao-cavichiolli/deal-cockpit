@@ -44,7 +44,9 @@ export default async function ConnectionsPage() {
                     <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#18A05B" }} />Connected
                   </span>
                 ) : (
-                  <a href="/auth/google" style={{ display: "inline-block", background: "#4F46E5", color: "#fff", borderRadius: 8, padding: "7px 16px", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>Connect</a>
+                  <form action="/auth/google" method="POST" style={{ display: "inline" }}>
+                    <button type="submit" style={{ background: "#4F46E5", color: "#fff", border: "none", borderRadius: 8, padding: "7px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Connect</button>
+                  </form>
                 )}
               </div>
             </div>
