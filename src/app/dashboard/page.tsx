@@ -4,6 +4,7 @@ import AppLayout from "@/components/app-layout";
 import { getDeals, getDealContacts, getPipelineStages } from "@/lib/hubspot";
 import { scoreDeal, sortByRisk } from "@/lib/scoring";
 import DealsTable from "./deals-table";
+import Greeting from "./greeting";
 
 function fmt(n: number | null) {
   if (!n) return "—";
@@ -52,12 +53,7 @@ export default async function DashboardPage() {
         {/* Morning header */}
         <div style={{ background: "#fff", border: "1px solid #EBEBEB", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
           <div>
-            <div style={{ fontSize: 12, color: "#A1A1AA", marginBottom: 4 }}>
-              {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })} · Lisbon
-            </div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: "#18181B", letterSpacing: "-0.02em" }}>
-              Good morning, {user.user_metadata?.full_name?.split(" ")[0] ?? user.email?.split("@")[0]}
-            </div>
+            <Greeting name={user.user_metadata?.full_name?.split(" ")[0] ?? user.email?.split("@")[0] ?? "there"} />
             <div style={{ fontSize: 13.5, color: "#71717A", marginTop: 3 }}>
               {deals
                 ? `Your pipeline has ${deals.length} open deals — ${atRisk} need a move.`
